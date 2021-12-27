@@ -9,10 +9,10 @@
     tools:parentTag="android.widget.LinearLayout">
 
     <ImageView
-        android:id="@+id/iv_"
+        android:id="@+id/iv"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:src="@mipmap/ic_02">
+        android:src="@mipmap/ic_2">
 
     </ImageView>
 

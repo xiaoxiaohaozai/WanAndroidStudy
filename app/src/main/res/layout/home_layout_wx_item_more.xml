@@ -12,7 +12,7 @@
         android:id="@+id/iv_"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:src="@mipmap/ic_03">
+        android:src="@mipmap/ic_3">
 
     </ImageView>
 

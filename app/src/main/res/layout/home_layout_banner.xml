@@ -2,4 +2,7 @@
 <com.youth.banner.Banner xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/banner"
     android:layout_width="match_parent"
-    android:layout_height="120dp" />
+    android:layout_height="120dp"
+    android:layout_marginLeft="4dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginRight="4dp" />

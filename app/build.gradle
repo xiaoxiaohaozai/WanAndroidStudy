@@ -45,7 +45,6 @@ kapt {
 dependencies {
 
     def nav_version = "2.3.5"
-    def epoxyVersion = "5.0.0-beta03"
 
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -70,10 +69,6 @@ dependencies {
     //图片加载
     implementation 'io.coil-kt:coil:1.4.0'
 
-    //Recyclerview (不好用 去掉)
-    implementation "com.airbnb.android:epoxy:$epoxyVersion"
-    kapt "com.airbnb.android:epoxy-processor:$epoxyVersion"
-
     //指示器
     implementation 'com.github.hackware1993:MagicIndicator:1.7.0'
 
@@ -83,8 +78,17 @@ dependencies {
     //banner
     implementation 'io.github.youth5201314:banner:2.2.2'
 
-    //Recyclerview 扩展
-    implementation 'com.github.liangjingkanji:BRV:1.3.40'
+    //brvah
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7'
 
+
+    //解决报错
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+
+    implementation  'io.github.scwang90:refresh-layout-kernel:2.0.5'
+    //核心必须依赖
+    implementation  'io.github.scwang90:refresh-header-classics:2.0.5'    //经典刷新头
+    implementation  'io.github.scwang90:refresh-header-material:2.0.5'    //谷歌刷新头
+    implementation  'io.github.scwang90:refresh-footer-classics:2.0.5'    //经典加载
 
 }
