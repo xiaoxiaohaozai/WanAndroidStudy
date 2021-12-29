@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/android/projects/wan-android-study/app/src/main/res/layout/common_layout_list.xml" value="0.5057291666666667" />
         <entry key="app/src/main/res/drawable/divider_horizontal.xml" value="0.4123076923076923" />
         <entry key="app/src/main/res/drawable/home_shape_corner.xml" value="0.3490740740740741" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.32037037037037036" />

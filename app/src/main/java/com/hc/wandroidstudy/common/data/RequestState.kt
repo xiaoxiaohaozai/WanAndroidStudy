@@ -1,9 +1,8 @@
 package com.hc.wandroidstudy.common.data
 
-enum class PageState {
-    Complete,
+enum class RequestState {
+    Success,
     Fail,
-    End,
     Empty,
     LoadMoreEnd,
     LoadMoreComplete,
