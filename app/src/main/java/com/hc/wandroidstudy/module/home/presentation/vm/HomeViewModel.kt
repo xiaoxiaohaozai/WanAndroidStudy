@@ -2,11 +2,10 @@ package com.hc.wandroidstudy.module.home.presentation.vm
 
 
 import com.airbnb.mvrx.*
-import com.blankj.utilcode.util.LogUtils
 
 import com.hc.wandroidstudy.common.data.BannerData
 import com.hc.wandroidstudy.common.data.HotProjectData
-import com.hc.wandroidstudy.common.data.HotProjectItemData
+import com.hc.wandroidstudy.common.data.PageState
 import com.hc.wandroidstudy.common.data.WxData
 
 import com.hc.wandroidstudy.common.mvrx.MvRxViewModel
@@ -19,7 +18,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 
-class HomeViewModel(initialState: HomeState, private val repository: IHomeRepository) : MvRxViewModel<HomeState>(initialState) {
+class  HomeViewModel(initialState: HomeState, private val repository: IHomeRepository) : MvRxViewModel<HomeState>(initialState) {
 
 
     var currentPage = 0
@@ -43,10 +42,15 @@ class HomeViewModel(initialState: HomeState, private val repository: IHomeReposi
     fun loadHomeDataMore() {
         viewModelScope.launch {
             val tempPage = currentPage + 1
-            repository.getHotProjectList(currentPage).collect {
-                currentPage = tempPage
+            repository.getHotProjectList(currentPage).catch {
                 setState {
-                    copy(items = items + it.datas, hasMore = it.curPage < it.pageCount)
+                    copy(error = it)
+                }
+            }.collect {
+                currentPage = tempPage
+                val pageState = if (it.curPage < it.pageCount) PageState.Complete else PageState.End
+                setState {
+                    copy(pageState = pageState, data = data + it.datas, error = null)
                 }
             }
         }
@@ -70,12 +74,15 @@ class HomeViewModel(initialState: HomeState, private val repository: IHomeReposi
                     add("热门项目")
                     addAll(hotProjectData.datas)
                 }
+
+                val pageState = if (hotProjectData.curPage < hotProjectData.pageCount) PageState.Complete else PageState.End
+
                 setState {
-                    copy(items = items, hasMore = hotProjectData.curPage < 3)
+                    copy(pageState = pageState, data = items, error = null)
                 }
             }
-                    .onStart { setState { copy(isLoading = true) } }
-                    .onCompletion { setState { copy(isLoading = false) } }
+                    .onStart { setState { copy(isRefreshing = true) } }
+                    .onCompletion { setState { copy(isRefreshing = false) } }
                     .catch { setState { copy(error = it) } }.collect()
         }
     }

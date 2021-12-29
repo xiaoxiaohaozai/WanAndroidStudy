@@ -5,17 +5,22 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
+import com.airbnb.mvrx.*
 
-import com.airbnb.mvrx.fragmentViewModel
-import com.airbnb.mvrx.withState
 import com.blankj.utilcode.util.LogUtils
+import com.blankj.utilcode.util.ToastUtils
 
 import com.hc.wandroidstudy.R
 import com.hc.wandroidstudy.common.adapter.CommonListAdapter
 import com.hc.wandroidstudy.common.data.HotProjectItemData
+import com.hc.wandroidstudy.common.data.PageState
+import com.hc.wandroidstudy.common.livedata_ext.*
 
 import com.hc.wandroidstudy.common.mvrx.MvRxFragment
+import com.hc.wandroidstudy.common.network.errorCode
+import com.hc.wandroidstudy.common.network.errorMsg
 import com.hc.wandroidstudy.databinding.*
+import com.hc.wandroidstudy.module.home.presentation.data.HomeState
 import com.hc.wandroidstudy.module.home.presentation.view.binder.*
 
 import com.hc.wandroidstudy.module.home.presentation.vm.HomeViewModel
@@ -29,6 +34,16 @@ class HomeFragment : MvRxFragment(R.layout.fragment_home) {
     private val binding: FragmentHomeBinding by viewBinding()
 
     var adapter = CommonListAdapter()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //监听错误
+        viewModel.onEach(HomeState::error, uniqueOnly()) {
+            it?.errorMsg?.run {
+                ToastUtils.showShort(this)
+            }
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,9 +77,9 @@ class HomeFragment : MvRxFragment(R.layout.fragment_home) {
         adapter.apply {
             addItemBinder(HomeBannerBinder())
             addItemBinder(HomeWxBinder())
-            addItemBinder(HomeCategoryBinder(),HomeCategoryBinder.Differ())
-            addItemBinder(HomeTitleBinder(),HomeTitleBinder.Differ())
-            addItemBinder(HomeProjectBinder(),HomeProjectBinder.Differ())
+            addItemBinder(HomeCategoryBinder(), HomeCategoryBinder.Differ())
+            addItemBinder(HomeTitleBinder(), HomeTitleBinder.Differ())
+            addItemBinder(HomeProjectBinder(), HomeProjectBinder.Differ())
         }
         val layoutManager = GridLayoutManager(context, 2)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -84,19 +99,18 @@ class HomeFragment : MvRxFragment(R.layout.fragment_home) {
      */
     override fun invalidate() {
         withState(viewModel) {
-            LogUtils.e("invalidate", "数据 ${it.hasMore}", "加载数据长度 ${it.items.size}")
+            LogUtils.e("invalidate", "界面状态 ${it.pageState}")
             //重置上拉刷新和下拉刷新状态
             adapter.loadMoreModule.isEnableLoadMore = true
             binding.refresh.finishRefresh()
 
             //更新数据
-            adapter.setDiffNewData(it.items.toMutableList())
+            adapter.setDiffNewData(it.data.toMutableList())
 
-            //是否有更多数据
-            if (it.hasMore) {
-                adapter.loadMoreModule.loadMoreComplete()
-            } else {
-                adapter.loadMoreModule.loadMoreEnd()
+            when (it.pageState) {
+                PageState.Complete -> adapter.loadMoreModule.loadMoreComplete()
+                PageState.End -> adapter.loadMoreModule.loadMoreEnd()
+                PageState.Fail -> adapter.loadMoreModule.loadMoreFail()
             }
         }
     }
