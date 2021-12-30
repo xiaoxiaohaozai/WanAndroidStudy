@@ -43,24 +43,29 @@ kapt {
 }
 
 dependencies {
-
-    def nav_version = "2.3.5"
-
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.3.0'
+    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    //viewModel LiveData 扩展
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
+
     //navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
+    implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
+
     //代码框架(类似mvi)
     implementation 'com.airbnb.android:mavericks:2.5.1'
     implementation 'androidx.fragment:fragment-ktx:1.3.6'
+
     //工具类
     implementation 'com.blankj:utilcodex:1.31.0'
+
     //网络框架
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
     implementation 'com.github.liujingxing.rxhttp:rxhttp:2.8.2'
@@ -80,13 +85,10 @@ dependencies {
 
     //brvah
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.7'
-
-
-    //解决报错
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
+    //加载效果
     implementation 'io.github.scwang90:refresh-layout-kernel:2.0.5'
-    //核心必须依赖
     implementation 'io.github.scwang90:refresh-header-classics:2.0.5'    //经典刷新头
     implementation 'io.github.scwang90:refresh-header-material:2.0.5'    //谷歌刷新头
     implementation 'io.github.scwang90:refresh-footer-classics:2.0.5'    //经典加载

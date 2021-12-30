@@ -5,16 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.GridLayoutManager
+
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseBinderAdapter
 import com.chad.library.adapter.base.listener.OnLoadMoreListener
-import com.hc.wandroidstudy.common.data.HotProjectItemData
-import com.hc.wandroidstudy.common.data.PageState
-import com.hc.wandroidstudy.common.data.RequestState
+import com.hc.wandroidstudy.common.adapter.CommonListAdapter
+
 import com.hc.wandroidstudy.databinding.CommonLayoutListBinding
-import com.hc.wandroidstudy.module.home.presentation.view.binder.*
+
+
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener
 
@@ -31,7 +31,7 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshListener
 abstract class CommonListFragment : BaseFragment<CommonLayoutListBinding>(), OnLoadMoreListener,
     OnRefreshListener {
 
-    private var baseBinderAdapter: BaseBinderAdapter = BaseBinderAdapter()
+     var baseBinderAdapter: BaseBinderAdapter = CommonListAdapter()
     override fun getViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -51,6 +51,7 @@ abstract class CommonListFragment : BaseFragment<CommonLayoutListBinding>(), OnL
         initAdapter(baseBinderAdapter)
         binding.list.layoutManager = getLayoutManager(baseBinderAdapter)
         binding.list.adapter = baseBinderAdapter
+
     }
 
     /**
@@ -89,39 +90,10 @@ abstract class CommonListFragment : BaseFragment<CommonLayoutListBinding>(), OnL
      * 下拉刷新时触发
      */
     override fun onRefresh(refreshLayout: RefreshLayout) {
-        //下拉刷新时，禁止上拉加载
-        if (baseBinderAdapter.loadMoreModule.isEnableLoadMore) {
-            baseBinderAdapter.loadMoreModule.isEnableLoadMore = false
-        }
         onRefreshEvent()
     }
 
-    fun finishLoadMore(pageState: RequestState) {
-        if (!isEnableLoadMore()){
-            return
-        }
-        when (pageState) {
-            RequestState.LoadMoreComplete -> baseBinderAdapter.loadMoreModule.loadMoreComplete()
-            RequestState.LoadMoreEnd -> baseBinderAdapter.loadMoreModule.loadMoreEnd()
-            RequestState.LoadMoreFail -> baseBinderAdapter.loadMoreModule.loadMoreFail()
-        }
-    }
 
-
-    /**
-     * 下拉加载完成
-     */
-    fun finishRefresh() {
-        //恢复上拉加载
-        if (isEnableLoadMore()) {
-            if (!baseBinderAdapter.loadMoreModule.isEnableLoadMore) {
-                baseBinderAdapter.loadMoreModule.isEnableLoadMore = true
-            }
-        }
-        if (binding.refresh.isRefreshing) {
-            binding.refresh.finishRefresh()
-        }
-    }
 
 
     private fun initLoadMore() {

@@ -14,10 +14,10 @@ import com.hc.wandroidstudy.R
 import com.hc.wandroidstudy.common.adapter.CommonListAdapter
 import com.hc.wandroidstudy.common.data.HotProjectItemData
 import com.hc.wandroidstudy.common.data.PageState
-import com.hc.wandroidstudy.common.livedata_ext.*
+
 
 import com.hc.wandroidstudy.common.mvrx.MvRxFragment
-import com.hc.wandroidstudy.common.network.errorCode
+
 import com.hc.wandroidstudy.common.network.errorMsg
 import com.hc.wandroidstudy.databinding.*
 import com.hc.wandroidstudy.module.home.presentation.data.HomeState
@@ -67,8 +67,9 @@ class HomeFragment : MvRxFragment(R.layout.fragment_home) {
      * 初始化加载更多
      */
     private fun initLoadMore() {
-        adapter.loadMoreModule.setOnLoadMoreListener { viewModel.loadHomeDataMore() }
-        adapter.loadMoreModule.isAutoLoadMore = true
+        adapter.loadMoreModule.setOnLoadMoreListener {
+            viewModel.loadHomeDataMore()
+        }
     }
 
 
