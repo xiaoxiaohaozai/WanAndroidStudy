@@ -28,8 +28,7 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshListener
  * 2 支持上拉加载,下拉刷新
  * 3 支持设置layoutManager
  */
-abstract class CommonListFragment : BaseFragment<CommonLayoutListBinding>(), OnLoadMoreListener,
-    OnRefreshListener {
+abstract class CommonListFragment : BaseFragment<CommonLayoutListBinding>() {
 
      var baseBinderAdapter: BaseBinderAdapter = CommonListAdapter()
     override fun getViewBinding(
@@ -42,8 +41,12 @@ abstract class CommonListFragment : BaseFragment<CommonLayoutListBinding>(), OnL
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initAdapter()
-        initRefresh()
-        initLoadMore()
+        binding.refresh.setOnLoadMoreListener {
+            onLoadMoreEvent()
+        }
+        binding.refresh.setOnRefreshListener {
+            onRefreshEvent()
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -51,7 +54,6 @@ abstract class CommonListFragment : BaseFragment<CommonLayoutListBinding>(), OnL
         initAdapter(baseBinderAdapter)
         binding.list.layoutManager = getLayoutManager(baseBinderAdapter)
         binding.list.adapter = baseBinderAdapter
-
     }
 
     /**
@@ -65,55 +67,10 @@ abstract class CommonListFragment : BaseFragment<CommonLayoutListBinding>(), OnL
     open fun getLayoutManager(adapter: BaseBinderAdapter): RecyclerView.LayoutManager =
         LinearLayoutManager(requireContext())
 
-    /**
-     * 上拉加载是否可用
-     */
-    open fun isEnableLoadMore(): Boolean = true
-
-    /**
-     * 下拉刷新是否可用
-     */
-    open fun isEnableRefresh(): Boolean = true
-
-    /**
-     * 上拉加载时触发
-     */
-    override fun onLoadMore() {
-        onLoadMoreEvent()
-    }
 
     abstract fun onLoadMoreEvent()
 
     abstract fun onRefreshEvent()
-
-    /**
-     * 下拉刷新时触发
-     */
-    override fun onRefresh(refreshLayout: RefreshLayout) {
-        onRefreshEvent()
-    }
-
-
-
-
-    private fun initLoadMore() {
-        if (isEnableLoadMore()) {
-            baseBinderAdapter.loadMoreModule.isEnableLoadMore = true
-            baseBinderAdapter.loadMoreModule.isAutoLoadMore = true
-            baseBinderAdapter.loadMoreModule.setOnLoadMoreListener(this)
-        } else {
-            baseBinderAdapter.loadMoreModule.isEnableLoadMore = false
-        }
-    }
-
-    private fun initRefresh() {
-        if (isEnableRefresh()) {
-            binding.refresh.setEnableRefresh(true)
-            binding.refresh.setOnRefreshListener(this)
-        } else {
-            binding.refresh.setEnableRefresh(false)
-        }
-    }
 
 
 }

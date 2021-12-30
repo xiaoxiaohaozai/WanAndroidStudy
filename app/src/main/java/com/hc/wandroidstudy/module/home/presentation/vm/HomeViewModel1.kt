@@ -78,11 +78,10 @@ class HomeViewModel1(private val repository: IHomeRepository) : ViewModel() {
                 }
                 _viewEvent.setEvent(HomeViewEvent.ShowToast(it.errorMsg))
             }.collect {
-
                // delay(4000)
                 currentPage = tempPage
                 _viewState.setState {
-                    copy(data = this.data + it.datas, loadMoreStatus = LoadStatus.LoadMoreSuccess(it.curPage < it.pageCount))
+                    copy(data = this.data + it.datas, loadMoreStatus = LoadStatus.LoadMoreSuccess(it.curPage < 5))
                 }
             }
         }

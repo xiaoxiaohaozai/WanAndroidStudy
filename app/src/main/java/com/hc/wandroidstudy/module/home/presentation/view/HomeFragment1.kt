@@ -1,10 +1,9 @@
 package com.hc.wandroidstudy.module.home.presentation.view
 
 import android.os.Bundle
-import android.view.LayoutInflater
+
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.createViewModelLazy
+
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,8 +13,6 @@ import com.chad.library.adapter.base.BaseBinderAdapter
 import com.hc.wandroidstudy.common.base.*
 import com.hc.wandroidstudy.common.data.HotProjectItemData
 import com.hc.wandroidstudy.common.mvi_core.observeState
-import com.hc.wandroidstudy.databinding.FragmentHomeBinding
-import com.hc.wandroidstudy.module.home.presentation.data.HomeState
 import com.hc.wandroidstudy.module.home.presentation.data.HomeViewAction
 import com.hc.wandroidstudy.module.home.presentation.data.HomeViewEvent
 import com.hc.wandroidstudy.module.home.presentation.data.HomeViewState
@@ -46,27 +43,18 @@ class HomeFragment1 : CommonListFragment() {
             //监听界面状态
             observeState(viewLifecycleOwner, HomeViewState::pageStatus) {
                 LogUtils.eTag("界面状态", it.javaClass.simpleName)
+                binding.refresh.closeHeaderOrFooter()
+                binding.refresh.setEnableLoadMore(false)
+                binding.refresh.setEnableRefresh(false)
                 when (it) {
-                    is PageStatus.Empty -> {
-                        baseBinderAdapter.loadMoreModule.isEnableLoadMore = false
-                        binding.refresh.setEnableRefresh(false)
-                        binding.state.showEmpty()
-                    }
+                    is PageStatus.Empty -> binding.state.showEmpty()
                     is PageStatus.Success -> {
-                        baseBinderAdapter.loadMoreModule.isEnableLoadMore = true
+                        binding.refresh.setEnableLoadMore(true)
                         binding.refresh.setEnableRefresh(true)
                         binding.state.showContent()
                     }
-                    is PageStatus.Error -> {
-                        baseBinderAdapter.loadMoreModule.isEnableLoadMore = false
-                        binding.refresh.setEnableRefresh(false)
-                        binding.state.showError()
-                    }
-                    is PageStatus.Loading -> {
-                        baseBinderAdapter.loadMoreModule.isEnableLoadMore = false
-                        binding.refresh.setEnableRefresh(false)
-                        binding.state.showLoading()
-                    }
+                    is PageStatus.Error -> binding.state.showError()
+                    is PageStatus.Loading -> binding.state.showLoading()
                 }
             }
 
@@ -76,20 +64,14 @@ class HomeFragment1 : CommonListFragment() {
                 when (it) {
                     is RefreshStatus.RefreshSuccess -> {
                         binding.refresh.finishRefresh()
-                        if (!baseBinderAdapter.loadMoreModule.isEnableLoadMore) {
-                            baseBinderAdapter.loadMoreModule.isEnableLoadMore = true
-                        }
                     }
                     is RefreshStatus.RefreshLoading -> {
-                        if (baseBinderAdapter.loadMoreModule.isEnableLoadMore) {
-                            baseBinderAdapter.loadMoreModule.isEnableLoadMore = false
+                        if (!binding.refresh.isRefreshing) {
+                            binding.refresh.autoRefreshAnimationOnly()
                         }
                     }
                     is RefreshStatus.RefreshFail -> {
                         binding.refresh.finishRefresh(false)
-                        if (!baseBinderAdapter.loadMoreModule.isEnableLoadMore) {
-                            baseBinderAdapter.loadMoreModule.isEnableLoadMore = true
-                        }
                     }
                 }
             }
@@ -99,22 +81,19 @@ class HomeFragment1 : CommonListFragment() {
                 LogUtils.eTag("上拉状态", it.javaClass.simpleName)
                 when (it) {
                     is LoadStatus.LoadMoreSuccess -> {
-                        baseBinderAdapter.loadMoreModule.isAutoLoadMore = true
-                        binding.refresh.setEnableRefresh(true)
                         if (it.hasMore) {
-                            baseBinderAdapter.loadMoreModule.loadMoreComplete()
+                            binding.refresh.finishLoadMore()
                         } else {
-                            baseBinderAdapter.loadMoreModule.loadMoreEnd()
+                            binding.refresh.finishLoadMoreWithNoMoreData()
                         }
                     }
                     is LoadStatus.LoadMoreLoading -> {
-                        baseBinderAdapter.loadMoreModule.isAutoLoadMore = false
-                        binding.refresh.setEnableRefresh(false)
+                      if (!binding.refresh.isLoading){
+                          binding.refresh.autoLoadMoreAnimationOnly()
+                      }
                     }
                     is LoadStatus.LoadMoreFail -> {
-                        baseBinderAdapter.loadMoreModule.loadMoreFail()
-                        baseBinderAdapter.loadMoreModule.isAutoLoadMore = true
-                        binding.refresh.setEnableRefresh(true)
+                        binding.refresh.finishLoadMore(false)
                     }
                 }
             }
@@ -128,6 +107,7 @@ class HomeFragment1 : CommonListFragment() {
             }
         }
     }
+
 
     override fun initAdapter(adapter: BaseBinderAdapter) {
         adapter.apply {
