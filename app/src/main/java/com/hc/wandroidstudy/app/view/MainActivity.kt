@@ -18,7 +18,5 @@ class MainActivity : AppCompatActivity() {
         BarUtils.transparentStatusBar(this)
         BarUtils.setStatusBarLightMode(this,true)
         setContentView(R.layout.activity_main)
-
-
     }
 }

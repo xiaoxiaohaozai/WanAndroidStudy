@@ -9,7 +9,6 @@ object Url {
     @DefaultDomain //通过该注解设置默认域名
     var BASE_URL = "https://www.wanandroid.com"
 
-
     //首页Banner
     const val BANNER = "/banner/json"
 

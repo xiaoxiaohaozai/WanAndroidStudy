@@ -8,8 +8,8 @@ import com.hc.wandroidstudy.common.base.RefreshStatus
 
 
 data class HomeViewState(val pageStatus: PageStatus = PageStatus.Empty,
-                         val refreshStatus: RefreshStatus = RefreshStatus.RefreshInit,
-                         val loadMoreStatus:LoadStatus = LoadStatus.LoadMoreInit,
+                         val refreshStatus: RefreshStatus = RefreshStatus.RefreshIdle,
+                         val loadMoreStatus:LoadStatus = LoadStatus.LoadMoreIdle,
                          val data: List<Any> = emptyList())
 
 sealed class HomeViewEvent {

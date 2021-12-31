@@ -21,15 +21,10 @@ internal data class StateTuple3<A, B, C>(val a: A, val b: B, val c: C)
  */
 suspend fun <T, A> Flow<T>.collectState(prop1: KProperty1<T, A>, action: (A) -> Unit) {
     this.map {
-        LogUtils.e("collectState")
         StateTuple1(prop1.get(it))
     }//获取属性值
-//            .distinctUntilChanged() //属性值变化
-            .onEach {
-                LogUtils.e("collectState collect${it.a}")
-              action.invoke(it.a)
-            }
- //订阅最新
+        .distinctUntilChanged() //属性值变化
+        .collectLatest { (a) -> action.invoke(a) }
 }
 
 
@@ -37,26 +32,26 @@ suspend fun <T, A> Flow<T>.collectState(prop1: KProperty1<T, A>, action: (A) -> 
  * 局部状态,支持两个参数
  */
 suspend fun <T, A, B> Flow<T>.collectState(
-        prop1: KProperty1<T, A>,
-        prop2: KProperty1<T, B>,
-        action: (A, B) -> Unit
+    prop1: KProperty1<T, A>,
+    prop2: KProperty1<T, B>,
+    action: (A, B) -> Unit
 ) {
     this.map { StateTuple2(prop1.get(it), prop2.get(it)) }
-            .distinctUntilChanged()
-            .collectLatest { (a, b) -> action.invoke(a, b) }
+        .distinctUntilChanged()
+        .collectLatest { (a, b) -> action.invoke(a, b) }
 }
 
 /**
  * 局部状态,支持三个参数
  */
 suspend fun <T, A, B, C> Flow<T>.collectState(
-        prop1: KProperty1<T, A>,
-        prop2: KProperty1<T, B>,
-        prop3: KProperty1<T, C>,
-        action: (A, B, C) -> Unit
+    prop1: KProperty1<T, A>,
+    prop2: KProperty1<T, B>,
+    prop3: KProperty1<T, C>,
+    action: (A, B, C) -> Unit
 ) {
     this.map { StateTuple3(prop1.get(it), prop2.get(it), prop3.get(it)) }
-            .distinctUntilChanged()
-            .collectLatest { (a, b, c) -> action.invoke(a, b, c) }
+        .distinctUntilChanged()
+        .collectLatest { (a, b, c) -> action.invoke(a, b, c) }
 }
 

@@ -4,10 +4,6 @@ import com.chad.library.adapter.base.BaseBinderAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
 
 /**
- * @ProjectName : WandroidStudy
- * @Author : 作者
- * @Time : 2021/12/27 17:05
- * @Description : 文件描述
+ * adapter 扩展加载更多功能
  */
-open class CommonListAdapter:BaseBinderAdapter(),LoadMoreModule {
-}
+open class CommonListAdapter : BaseBinderAdapter(), LoadMoreModule

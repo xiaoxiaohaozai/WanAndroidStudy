@@ -16,7 +16,7 @@ sealed class PageStatus {
  * 列表加载更多状态
  */
 sealed class LoadStatus {
-    object LoadMoreInit : LoadStatus()
+    object LoadMoreIdle : LoadStatus()
     object LoadMoreLoading : LoadStatus()
     data class LoadMoreSuccess(val hasMore: Boolean) : LoadStatus()
     data class LoadMoreFail(val error: Throwable) : LoadStatus()
@@ -27,7 +27,7 @@ sealed class LoadStatus {
  * 列表刷新状态
  */
 sealed class RefreshStatus {
-    object RefreshInit : RefreshStatus()
+    object RefreshIdle : RefreshStatus()
     object RefreshLoading : RefreshStatus()
     object RefreshSuccess : RefreshStatus()
     data class RefreshFail(val error: Throwable) : RefreshStatus()

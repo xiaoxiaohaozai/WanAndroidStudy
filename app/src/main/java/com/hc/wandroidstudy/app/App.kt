@@ -18,19 +18,18 @@ class App : Application() {
         super.onCreate()
         Utils.init(this)
         Mavericks.initialize(this)
+        //日志配置
         LogUtils.getConfig().apply {
             setBorderSwitch(false)
-            setLogHeadSwitch(false)
+            isLogHeadSwitch = false
         }
-
-
-        //设置网络
+        //网络配置
         val cacheDir = File(externalCacheDir, "RxHttpCache")
         RxHttpPlugins.init(RxHttpPlugins.getOkHttpClient())
                 //设置最大缓存为10M，缓存有效时长为60秒
                 .setCache(cacheDir, 10 * 1024 * 1024, CacheMode.READ_CACHE_FAILED_REQUEST_NETWORK, 60 * 1000)
-                .setDebug(true)
-
+                .setDebug(false)
+        //缺省页配置
         StateConfig.apply {
             errorLayout = R.layout.layout_error
             emptyLayout = R.layout.layout_empty

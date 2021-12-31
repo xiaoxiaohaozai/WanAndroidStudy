@@ -1,4 +1,4 @@
-package com.hc.wandroidstudy.module.home.presentation.vm
+package com.hc.wandroidstudy.module.home.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -20,7 +20,6 @@ import com.hc.wandroidstudy.module.home.domain.IHomeRepository
 import com.hc.wandroidstudy.module.home.presentation.data.BannerUIModel
 import com.hc.wandroidstudy.module.home.presentation.data.CategoryItemUIModel
 import com.hc.wandroidstudy.module.home.presentation.data.WxUIModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
@@ -28,20 +27,16 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 /**
- * @author ace
- * @createDate 2021/12/31
- * @explain
  *  包含整个界面的状态
  */
-data class HomePageViewState(val pageStatus: PageStatus = PageStatus.Empty,
-                         val refreshStatus: RefreshStatus = RefreshStatus.RefreshInit,
-                         val loadMoreStatus: LoadStatus = LoadStatus.LoadMoreInit,
-                         val data: List<Any> = emptyList()) : UIState
+data class HomePageViewState(
+    val pageStatus: PageStatus = PageStatus.Empty,
+    val refreshStatus: RefreshStatus = RefreshStatus.RefreshIdle,
+    val loadMoreStatus: LoadStatus = LoadStatus.LoadMoreIdle,
+    val data: List<Any> = emptyList()
+) : UIState
 
 /**
- * @author ace
- * @createDate 2021/12/31
- * @explain
  *  单次事件
  */
 sealed class HomePageViewEffect : UIEffect {
@@ -51,9 +46,6 @@ sealed class HomePageViewEffect : UIEffect {
 }
 
 /**
- * @author ace
- * @createDate 2021/12/31
- * @explain
  *  用户意图事件
  */
 sealed class HomePageViewEvent : UIEvent {
@@ -62,7 +54,8 @@ sealed class HomePageViewEvent : UIEvent {
     object RefreshData : HomePageViewEvent()
 }
 
-class HomePageViewModel(private val repository: IHomeRepository) : BaseViewModel<HomePageViewState, HomePageViewEvent, HomePageViewEffect>() {
+class HomePageViewModel(private val repository: IHomeRepository) :
+    BaseViewModel<HomePageViewState, HomePageViewEvent, HomePageViewEffect>() {
     private var currentPage = 0
 
 
@@ -102,7 +95,12 @@ class HomePageViewModel(private val repository: IHomeRepository) : BaseViewModel
                 setState { copy(loadMoreStatus = LoadStatus.LoadMoreFail(it)) }
             }.collect {
                 currentPage = tempPage
-                setState { copy(data = this.data + it.datas, loadMoreStatus = LoadStatus.LoadMoreSuccess(it.curPage < 5)) }
+                setState {
+                    copy(
+                        data = this.data + it.datas,
+                        loadMoreStatus = LoadStatus.LoadMoreSuccess(it.curPage < it.pageCount)
+                    )
+                }
             }
         }
     }
@@ -113,12 +111,21 @@ class HomePageViewModel(private val repository: IHomeRepository) : BaseViewModel
     private fun loadData() {
         viewModelScope.launch {
             currentPage = 0
-            combine(repository.getBanner(), repository.getWx(), repository.getHotProjectList(currentPage)) { array ->
+            combine(
+                repository.getBanner(),
+                repository.getWx(),
+                repository.getHotProjectList(currentPage)
+            ) { array ->
                 val bannerData = array[0] as List<BannerData>
                 val wxData = array[1] as List<WxData>
                 val hotProjectData = array[2] as HotProjectData
-                delay(2000)
-                setState { copy(pageStatus = PageStatus.Success, data = toUI(bannerData, wxData, hotProjectData), loadMoreStatus = LoadStatus.LoadMoreSuccess(hotProjectData.curPage < hotProjectData.pageCount)) }
+                setState {
+                    copy(
+                        pageStatus = PageStatus.Success,
+                        data = toItemList(bannerData, wxData, hotProjectData),
+                        loadMoreStatus = LoadStatus.LoadMoreSuccess(hotProjectData.curPage < hotProjectData.pageCount)
+                    )
+                }
             }.onStart {
                 setState { copy(pageStatus = PageStatus.Loading) }
             }.catch {
@@ -132,22 +139,41 @@ class HomePageViewModel(private val repository: IHomeRepository) : BaseViewModel
     private fun refreshData() {
         viewModelScope.launch {
             currentPage = 0
-            combine(repository.getBanner(), repository.getWx(), repository.getHotProjectList(currentPage)) { array ->
+            combine(
+                repository.getBanner(),
+                repository.getWx(),
+                repository.getHotProjectList(currentPage)
+            ) { array ->
                 val bannerData = array[0] as List<BannerData>
                 val wxData = array[1] as List<WxData>
                 val hotProjectData = array[2] as HotProjectData
-                setState { copy(data = toUI(bannerData, wxData, hotProjectData), refreshStatus = RefreshStatus.RefreshSuccess, loadMoreStatus = LoadStatus.LoadMoreSuccess(hotProjectData.curPage < hotProjectData.pageCount)) }
+                setState {
+                    copy(
+                        data = toItemList(bannerData, wxData, hotProjectData),
+                        refreshStatus = RefreshStatus.RefreshSuccess,
+                        loadMoreStatus = LoadStatus.LoadMoreSuccess(hotProjectData.curPage < hotProjectData.pageCount)
+                    )
+                }
             }.onStart {
                 setState { copy(refreshStatus = RefreshStatus.RefreshLoading) }
             }.catch {
                 setEffect { HomePageViewEffect.ShowToast(it.errorMsg) }
-                setState { copy(refreshStatus = RefreshStatus.RefreshFail(it), pageStatus = PageStatus.Error(it)) }
+                setState {
+                    copy(
+                        refreshStatus = RefreshStatus.RefreshFail(it),
+                        pageStatus = PageStatus.Error(it)
+                    )
+                }
             }.collect()
         }
     }
 
 
-    private fun toUI(bannerData: List<BannerData>, wxData: List<WxData>, hotProjectData: HotProjectData): List<Any> {
+    private fun toItemList(
+        bannerData: List<BannerData>,
+        wxData: List<WxData>,
+        hotProjectData: HotProjectData
+    ): List<Any> {
         val items = mutableListOf<Any>()
         val wxItems = wxData.subList(0, wxData.size.coerceAtMost(7))
         (wxItems as MutableList).add(WxData(-1, -1, "更多", -1, -1))
