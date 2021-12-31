@@ -39,7 +39,6 @@ class HomeFragment1 : CommonListFragment() {
         }
 
         viewModel.viewState.run {
-
             //监听界面状态
             observeState(viewLifecycleOwner, HomeViewState::pageStatus) {
                 LogUtils.eTag("界面状态", it.javaClass.simpleName)
@@ -88,9 +87,9 @@ class HomeFragment1 : CommonListFragment() {
                         }
                     }
                     is LoadStatus.LoadMoreLoading -> {
-                      if (!binding.refresh.isLoading){
-                          binding.refresh.autoLoadMoreAnimationOnly()
-                      }
+                        if (!binding.refresh.isLoading) {
+                            binding.refresh.autoLoadMoreAnimationOnly()
+                        }
                     }
                     is LoadStatus.LoadMoreFail -> {
                         binding.refresh.finishLoadMore(false)
@@ -101,7 +100,6 @@ class HomeFragment1 : CommonListFragment() {
             //监听数据
             observeState(viewLifecycleOwner, HomeViewState::data) {
                 LogUtils.eTag("界面数据", it.size)
-
                 baseBinderAdapter.setDiffNewData(it.toMutableList())
 
             }
@@ -109,7 +107,7 @@ class HomeFragment1 : CommonListFragment() {
     }
 
 
-    override fun initAdapter(adapter: BaseBinderAdapter) {
+    override fun initAdapterConfig(adapter: BaseBinderAdapter) {
         adapter.apply {
             addItemBinder(HomeBannerBinder())
             addItemBinder(HomeWxBinder())

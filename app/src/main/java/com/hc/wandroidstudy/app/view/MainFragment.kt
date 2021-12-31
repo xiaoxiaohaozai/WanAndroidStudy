@@ -9,11 +9,14 @@ import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.blankj.utilcode.util.ColorUtils
+import com.blankj.utilcode.util.LogUtils
 import com.hc.wandroidstudy.R
 import com.hc.wandroidstudy.common.mvrx.MvRxFragment
 import com.hc.wandroidstudy.common.mvrx.MvRxViewModel
 import com.hc.wandroidstudy.databinding.FragmentMainBinding
 import com.hc.wandroidstudy.utils.viewbinding.viewBinding
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator
@@ -22,9 +25,11 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.Li
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
 
 
-data class MainState(val tabs: List<String> = arrayListOf("首页", "热门文章")) : MavericksState
+data class MainState(val tabs: List<String> = arrayListOf("首页", "热门文章"),val test:Int =5) : MavericksState
 
-class MainViewModel(initialState: MainState) : MvRxViewModel<MainState>(initialState)
+class MainViewModel(initialState: MainState) : MvRxViewModel<MainState>(initialState){
+    val test = MutableStateFlow<String>("123")
+}
 
 class MainFragment : MvRxFragment(R.layout.fragment_main) {
 
@@ -38,6 +43,16 @@ class MainFragment : MvRxFragment(R.layout.fragment_main) {
         withState(viewModel) {
             initIndicator(it.tabs)
             initFragment(it.tabs)
+        }
+        viewModel.onEach(MainState::tabs){
+            LogUtils.e("监听列表1",it.size)
+        }
+
+        viewModel.onEach(MainState::tabs){
+            LogUtils.e("监听列表2",it.size)
+        }
+        viewModel.onEach(MainState::test){
+            LogUtils.e("监听列表3",it)
         }
     }
 

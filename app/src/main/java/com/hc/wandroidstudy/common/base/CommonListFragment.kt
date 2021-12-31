@@ -1,6 +1,5 @@
 package com.hc.wandroidstudy.common.base
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,14 +8,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseBinderAdapter
-import com.chad.library.adapter.base.listener.OnLoadMoreListener
 import com.hc.wandroidstudy.common.adapter.CommonListAdapter
 
 import com.hc.wandroidstudy.databinding.CommonLayoutListBinding
-
-
-import com.scwang.smart.refresh.layout.api.RefreshLayout
-import com.scwang.smart.refresh.layout.listener.OnRefreshListener
 
 
 /**
@@ -30,17 +24,28 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshListener
  */
 abstract class CommonListFragment : BaseFragment<CommonLayoutListBinding>() {
 
-     var baseBinderAdapter: BaseBinderAdapter = CommonListAdapter()
+    var baseBinderAdapter: BaseBinderAdapter = CommonListAdapter()
+
+    val refreshView by lazy {
+        binding.refresh
+    }
+
+    val stateView by lazy {
+        binding.state
+    }
+
     override fun getViewBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
+            inflater: LayoutInflater,
+            container: ViewGroup?
     ): CommonLayoutListBinding {
         return CommonLayoutListBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAdapter()
+        initAdapterConfig(baseBinderAdapter)
+        binding.list.layoutManager = getLayoutManager(baseBinderAdapter)
+        binding.list.adapter = baseBinderAdapter
         binding.refresh.setOnLoadMoreListener {
             onLoadMoreEvent()
         }
@@ -49,23 +54,16 @@ abstract class CommonListFragment : BaseFragment<CommonLayoutListBinding>() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun initAdapter() {
-        initAdapter(baseBinderAdapter)
-        binding.list.layoutManager = getLayoutManager(baseBinderAdapter)
-        binding.list.adapter = baseBinderAdapter
-    }
 
     /**
      * adapter 配置
      */
-    abstract fun initAdapter(adapter: BaseBinderAdapter)
+    abstract fun initAdapterConfig(adapter: BaseBinderAdapter)
 
     /**
      * 获取布局管理器
      */
-    open fun getLayoutManager(adapter: BaseBinderAdapter): RecyclerView.LayoutManager =
-        LinearLayoutManager(requireContext())
+    open fun getLayoutManager(adapter: BaseBinderAdapter): RecyclerView.LayoutManager = LinearLayoutManager(requireContext())
 
 
     abstract fun onLoadMoreEvent()
