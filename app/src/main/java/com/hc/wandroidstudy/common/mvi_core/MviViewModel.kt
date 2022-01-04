@@ -1,4 +1,4 @@
-package com.hc.wandroidstudy.common.base.mvi
+package com.hc.wandroidstudy.common.mvi_core
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -34,7 +34,7 @@ abstract class BaseViewModel<State : UIState, Event : UIEvent, Effect : UIEffect
      * 包含UI所有的状态
      * StateFlow和协程结合使用可以达到LiveData的效果
      */
-     val _state = MutableStateFlow(initialState)
+    private val _state = MutableStateFlow(initialState)
 
     val state = _state.asStateFlow()
 
@@ -54,8 +54,8 @@ abstract class BaseViewModel<State : UIState, Event : UIEvent, Effect : UIEffect
      * 事件带来的副作用，通常是 一次性事件 且 一对一的订阅关系
      * 例如：弹Toast、导航Fragment等
      * Channel特点
-     *  1.每个消息只有一个订阅者可以收到，用于一对一的通信
-     *  2.第一个订阅者可以收到 collect 之前的事件
+     * 1.每个消息只有一个订阅者可以收到，用于一对一的通信
+     * 2.第一个订阅者可以收到 collect 之前的事件
      */
     private val _effect: Channel<Effect> = Channel()
     val effect = _effect.receiveAsFlow()

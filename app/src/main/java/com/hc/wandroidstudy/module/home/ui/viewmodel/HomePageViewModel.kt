@@ -1,4 +1,4 @@
-package com.hc.wandroidstudy.module.home.presentation.viewmodel
+package com.hc.wandroidstudy.module.home.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -6,10 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.hc.wandroidstudy.common.base.LoadStatus
 import com.hc.wandroidstudy.common.base.PageStatus
 import com.hc.wandroidstudy.common.base.RefreshStatus
-import com.hc.wandroidstudy.common.base.mvi.BaseViewModel
-import com.hc.wandroidstudy.common.base.mvi.UIEffect
-import com.hc.wandroidstudy.common.base.mvi.UIEvent
-import com.hc.wandroidstudy.common.base.mvi.UIState
+import com.hc.wandroidstudy.common.mvi_core.BaseViewModel
+import com.hc.wandroidstudy.common.mvi_core.UIEffect
+import com.hc.wandroidstudy.common.mvi_core.UIEvent
+import com.hc.wandroidstudy.common.mvi_core.UIState
 import com.hc.wandroidstudy.data.WanAndroidRepository
 import com.hc.wandroidstudy.data.bean.BannerData
 import com.hc.wandroidstudy.data.bean.HotProjectData
@@ -17,14 +17,13 @@ import com.hc.wandroidstudy.data.bean.WxData
 import com.hc.wandroidstudy.data.network.WanAndroidClient
 import com.hc.wandroidstudy.data.network.errorMsg
 import com.hc.wandroidstudy.module.home.model.HomeModel
-import com.hc.wandroidstudy.module.home.presentation.model.BannerUIModel
-import com.hc.wandroidstudy.module.home.presentation.model.CategoryItemUIModel
-import com.hc.wandroidstudy.module.home.presentation.model.WxUIModel
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.onStart
+import com.hc.wandroidstudy.module.home.ui.model.BannerUIModel
+import com.hc.wandroidstudy.module.home.ui.model.CategoryItemUIModel
+import com.hc.wandroidstudy.module.home.ui.model.WxUIModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  *  包含整个界面的状态
@@ -60,25 +59,25 @@ sealed class HomePageViewEvent : UIEvent {
  * @explain
  * 作用:
  *  1.ViewModel 处理 表现层逻辑(视图逻辑) ,维护视图的 状态 和 行为
- *  2.完成 PO -> VO 的转换 (一般 PO 和 VO 差距不大,很多情况下都是复用 PO 的对象,但是他们的意义是不一样的)
+ *  2.完成 PO -> VO 的转换 (一般 PO 和 VO 差距不大,很多情况下都是复用 PO 对象,但是在不同层它们的意义是不一样的)
  *
  * 注意:
  * MVI 将状态封装在了 State 中统一管理,和 MVVM 有所区别
  */
-class HomePageViewModel(private val homeModel: HomeModel) :
-        BaseViewModel<HomePageViewState, HomePageViewEvent, HomePageViewEffect>() {
+@HiltViewModel
+class HomePageViewModel @Inject constructor(private val homeModel: HomeModel) : BaseViewModel<HomePageViewState, HomePageViewEvent, HomePageViewEffect>() {
+
     private var currentPage = 0
 
-
-    class ViewModelFactory : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            //TODO 可以使用依赖注入
-            val wanAndroidApi = WanAndroidClient()
-            val repository = WanAndroidRepository(wanAndroidApi)
-            val homeRepository = HomeModel(repository)
-            return HomePageViewModel(homeRepository) as T
-        }
-    }
+//    class ViewModelFactory : ViewModelProvider.Factory {
+//        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+//            //TODO 可以使用依赖注入
+//            val wanAndroidApi = WanAndroidClient()
+//            val repository = WanAndroidRepository(wanAndroidApi)
+//            val homeRepository = HomeModel(repository)
+//            return HomePageViewModel(homeRepository) as T
+//        }
+//    }
 
     override fun providerInitialState(): HomePageViewState = HomePageViewState()
 
@@ -94,9 +93,6 @@ class HomePageViewModel(private val homeModel: HomeModel) :
         loadData()
     }
 
-    /**
-     * 加载更多
-     */
     private fun loadDataMore() {
         viewModelScope.launch {
             val tempPage = currentPage + 1

@@ -1,12 +1,14 @@
-package com.hc.wandroidstudy.common.data.network
+package com.hc.wandroidstudy.data.network
 
-import com.hc.wandroidstudy.common.data.bean.BannerData
-import com.hc.wandroidstudy.common.data.bean.HotProjectData
-import com.hc.wandroidstudy.common.data.bean.WxData
+import com.hc.wandroidstudy.data.bean.BannerData
+import com.hc.wandroidstudy.data.bean.HotProjectData
+import com.hc.wandroidstudy.data.bean.WxData
 import kotlinx.coroutines.flow.Flow
 
 import rxhttp.wrapper.param.RxHttp
 import rxhttp.wrapper.param.toFlowResponse
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * @author ace
@@ -15,7 +17,7 @@ import rxhttp.wrapper.param.toFlowResponse
  *
  * 网络数据中间层实现 @link [WanAndroidApi]
  */
-class WanAndroidClient : WanAndroidApi {
+class WanAndroidClient @Inject constructor() : WanAndroidApi {
 
     override fun getBanner(): Flow<List<BannerData>> {
         return RxHttp.get(Url.BANNER).toFlowResponse()

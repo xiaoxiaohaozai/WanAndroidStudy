@@ -1,4 +1,4 @@
-package com.hc.wandroidstudy.module.home.presentation.view
+package com.hc.wandroidstudy.module.home.ui.view
 
 import android.os.Bundle
 import android.view.View
@@ -13,13 +13,14 @@ import com.hc.wandroidstudy.common.base.CommonListFragment
 import com.hc.wandroidstudy.common.base.LoadStatus
 import com.hc.wandroidstudy.common.base.PageStatus
 import com.hc.wandroidstudy.common.base.RefreshStatus
-import com.hc.wandroidstudy.common.base.mvi.collectState
+import com.hc.wandroidstudy.common.mvi_core.collectState
 import com.hc.wandroidstudy.data.bean.HotProjectItemData
-import com.hc.wandroidstudy.module.home.presentation.view.binder.*
-import com.hc.wandroidstudy.module.home.presentation.viewmodel.HomePageViewEffect
-import com.hc.wandroidstudy.module.home.presentation.viewmodel.HomePageViewEvent
-import com.hc.wandroidstudy.module.home.presentation.viewmodel.HomePageViewModel
-import com.hc.wandroidstudy.module.home.presentation.viewmodel.HomePageViewState
+import com.hc.wandroidstudy.module.home.ui.view.binder.*
+import com.hc.wandroidstudy.module.home.ui.viewmodel.HomePageViewEffect
+import com.hc.wandroidstudy.module.home.ui.viewmodel.HomePageViewEvent
+import com.hc.wandroidstudy.module.home.ui.viewmodel.HomePageViewModel
+import com.hc.wandroidstudy.module.home.ui.viewmodel.HomePageViewState
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
 
@@ -29,10 +30,9 @@ import kotlinx.coroutines.flow.collect
  * @explain
  *  采用mvi 模式搭建首页
  */
+@AndroidEntryPoint
 class HomePageFragment : CommonListFragment() {
-    private val viewModel by viewModels<HomePageViewModel> {
-        HomePageViewModel.ViewModelFactory()
-    }
+    private val viewModel by viewModels<HomePageViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

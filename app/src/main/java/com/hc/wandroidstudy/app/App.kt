@@ -7,12 +7,14 @@ import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.Utils
 import com.drake.statelayout.StateConfig
 import com.hc.wandroidstudy.R
+import dagger.hilt.android.HiltAndroidApp
 
 import rxhttp.RxHttpPlugins
 import rxhttp.wrapper.cahce.CacheMode
 import java.io.File
 
 
+@HiltAndroidApp
 class App : Application() {
     override fun onCreate() {
         super.onCreate()

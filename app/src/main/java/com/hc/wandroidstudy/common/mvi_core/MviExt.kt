@@ -1,4 +1,4 @@
-package com.hc.wandroidstudy.common.base.mvi
+package com.hc.wandroidstudy.common.mvi_core
 
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.KProperty1

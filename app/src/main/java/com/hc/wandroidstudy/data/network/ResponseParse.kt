@@ -1,6 +1,6 @@
-package com.hc.wandroidstudy.common.data.network
+package com.hc.wandroidstudy.data.network
 
-import com.hc.wandroidstudy.common.data.bean.CommonResponse
+import com.hc.wandroidstudy.data.bean.CommonResponse
 import okhttp3.Response
 import rxhttp.wrapper.annotation.Parser
 import rxhttp.wrapper.exception.ParseException

@@ -1,4 +1,4 @@
-package com.hc.wandroidstudy.common.data.network
+package com.hc.wandroidstudy.data.network
 
 import com.blankj.utilcode.util.NetworkUtils
 import com.google.gson.JsonSyntaxException

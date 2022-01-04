@@ -1,4 +1,4 @@
-package com.hc.wandroidstudy.module.home.presentation.view.binder
+package com.hc.wandroidstudy.module.home.ui.view.binder
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -14,7 +14,7 @@ import com.hc.wandroidstudy.data.bean.WxData
 
 import com.hc.wandroidstudy.databinding.HomeLayoutWxGridBinding
 
-import com.hc.wandroidstudy.module.home.presentation.model.WxUIModel
+import com.hc.wandroidstudy.module.home.ui.model.WxUIModel
 
 
 /**

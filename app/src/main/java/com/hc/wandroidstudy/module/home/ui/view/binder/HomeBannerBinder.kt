@@ -1,4 +1,4 @@
-package com.hc.wandroidstudy.module.home.presentation.view.binder
+package com.hc.wandroidstudy.module.home.ui.view.binder
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,7 @@ import com.blankj.utilcode.util.SizeUtils
 import com.chad.library.adapter.base.binder.QuickViewBindingItemBinder
 import com.hc.wandroidstudy.data.bean.BannerData
 import com.hc.wandroidstudy.databinding.HomeLayoutBannerBinding
-import com.hc.wandroidstudy.module.home.presentation.model.BannerUIModel
+import com.hc.wandroidstudy.module.home.ui.model.BannerUIModel
 import com.youth.banner.adapter.BannerImageAdapter
 import com.youth.banner.holder.BannerImageHolder
 import com.youth.banner.indicator.CircleIndicator

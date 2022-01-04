@@ -1,4 +1,4 @@
-package com.hc.wandroidstudy.common.data.bean
+package com.hc.wandroidstudy.data.bean
 
 
 data class CommonResponse<T>(val data: T, val errorCode: Int, val errorMsg: String)

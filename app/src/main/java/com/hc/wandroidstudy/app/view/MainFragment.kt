@@ -15,6 +15,7 @@ import com.hc.wandroidstudy.common.mvrx.MvRxFragment
 import com.hc.wandroidstudy.common.mvrx.MvRxViewModel
 import com.hc.wandroidstudy.databinding.FragmentMainBinding
 import com.hc.wandroidstudy.utils.viewbinding.viewBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
@@ -28,6 +29,8 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 data class MainState(val tabs: List<String> = arrayListOf("首页", "热门文章")) : MavericksState
 
 class MainViewModel(initialState: MainState) : MvRxViewModel<MainState>(initialState)
+
+
 class MainFragment : MvRxFragment(R.layout.fragment_main) {
 
     private val binding: FragmentMainBinding by viewBinding()
@@ -36,13 +39,11 @@ class MainFragment : MvRxFragment(R.layout.fragment_main) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //初次加载
         withState(viewModel) {
             initIndicator(it.tabs)
             initFragment(it.tabs)
         }
     }
-
 
     override fun invalidate() {
 
@@ -70,7 +71,6 @@ class MainFragment : MvRxFragment(R.layout.fragment_main) {
             }
         }
         binding.tabs.navigator = commonNavigator
-
     }
 
     private fun initFragment(tabs: List<String>) {

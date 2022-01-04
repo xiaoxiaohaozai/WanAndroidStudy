@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.hc.wandroidstudy.module.article.view.HotArticlesFragment
-import com.hc.wandroidstudy.module.home.presentation.view.HomePageFragment
+import com.hc.wandroidstudy.module.home.ui.view.HomePageFragment
 import java.security.InvalidParameterException
 
 

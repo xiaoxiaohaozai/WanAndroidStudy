@@ -1,4 +1,4 @@
-package com.hc.wandroidstudy.module.home.presentation.model
+package com.hc.wandroidstudy.module.home.ui.model
 
 import com.hc.wandroidstudy.data.bean.BannerData
 import com.hc.wandroidstudy.data.bean.WxData

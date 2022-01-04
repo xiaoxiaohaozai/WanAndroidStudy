@@ -1,4 +1,4 @@
-package com.hc.wandroidstudy.common.data.network
+package com.hc.wandroidstudy.data.network
 
 import rxhttp.wrapper.annotation.DefaultDomain
 

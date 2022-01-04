@@ -1,11 +1,11 @@
-package com.hc.wandroidstudy.module.home.presentation.view.binder
+package com.hc.wandroidstudy.module.home.ui.view.binder
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import com.chad.library.adapter.base.binder.QuickViewBindingItemBinder
 import com.hc.wandroidstudy.databinding.HomeLayoutCategoryItemBinding
-import com.hc.wandroidstudy.module.home.presentation.model.CategoryItemUIModel
+import com.hc.wandroidstudy.module.home.ui.model.CategoryItemUIModel
 
 /**
   * @author ace

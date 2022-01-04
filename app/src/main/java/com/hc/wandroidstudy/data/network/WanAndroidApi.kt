@@ -1,8 +1,8 @@
-package com.hc.wandroidstudy.common.data.network
+package com.hc.wandroidstudy.data.network
 
-import com.hc.wandroidstudy.common.data.bean.BannerData
-import com.hc.wandroidstudy.common.data.bean.HotProjectData
-import com.hc.wandroidstudy.common.data.bean.WxData
+import com.hc.wandroidstudy.data.bean.BannerData
+import com.hc.wandroidstudy.data.bean.HotProjectData
+import com.hc.wandroidstudy.data.bean.WxData
 import kotlinx.coroutines.flow.Flow
 
 

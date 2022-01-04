@@ -11,6 +11,7 @@ import com.chad.library.adapter.base.BaseBinderAdapter
 import com.hc.wandroidstudy.common.adapter.CommonListAdapter
 
 import com.hc.wandroidstudy.databinding.CommonLayoutListBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 
 /**
