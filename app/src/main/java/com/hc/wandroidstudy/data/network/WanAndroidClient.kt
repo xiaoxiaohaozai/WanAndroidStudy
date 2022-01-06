@@ -7,8 +7,10 @@ import kotlinx.coroutines.flow.Flow
 
 import rxhttp.wrapper.param.RxHttp
 import rxhttp.wrapper.param.toFlowResponse
+import rxhttp.wrapper.param.toResponse
 import javax.inject.Inject
 import javax.inject.Singleton
+
 
 /**
  * @author ace
@@ -17,6 +19,7 @@ import javax.inject.Singleton
  *
  * 网络数据中间层实现 @link [WanAndroidApi]
  */
+@Singleton
 class WanAndroidClient @Inject constructor() : WanAndroidApi {
 
     override fun getBanner(): Flow<List<BannerData>> {
@@ -28,6 +31,6 @@ class WanAndroidClient @Inject constructor() : WanAndroidApi {
     }
 
     override fun getHotProjectList(page: Int): Flow<HotProjectData> {
-        return RxHttp.get("/article/listproject/${page}/json").toFlowResponse()
+        return RxHttp.get("/article/listproject/${page}/json?page_size=40").toFlowResponse()
     }
 }

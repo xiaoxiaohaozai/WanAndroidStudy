@@ -10,9 +10,9 @@ import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.chad.library.adapter.base.BaseBinderAdapter
 import com.hc.wandroidstudy.common.base.CommonListFragment
-import com.hc.wandroidstudy.common.base.LoadStatus
-import com.hc.wandroidstudy.common.base.PageStatus
-import com.hc.wandroidstudy.common.base.RefreshStatus
+import com.hc.wandroidstudy.data.bean.LoadStatus
+import com.hc.wandroidstudy.data.bean.PageStatus
+import com.hc.wandroidstudy.data.bean.RefreshStatus
 import com.hc.wandroidstudy.common.mvi_core.collectState
 import com.hc.wandroidstudy.data.bean.HotProjectItemData
 import com.hc.wandroidstudy.module.home.ui.view.binder.*

@@ -1,20 +1,18 @@
 package com.hc.wandroidstudy.module.home.ui.viewmodel
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.hc.wandroidstudy.common.base.LoadStatus
-import com.hc.wandroidstudy.common.base.PageStatus
-import com.hc.wandroidstudy.common.base.RefreshStatus
+import com.blankj.utilcode.util.LogUtils
+import com.hc.wandroidstudy.data.bean.LoadStatus
+import com.hc.wandroidstudy.data.bean.PageStatus
+import com.hc.wandroidstudy.data.bean.RefreshStatus
 import com.hc.wandroidstudy.common.mvi_core.BaseViewModel
 import com.hc.wandroidstudy.common.mvi_core.UIEffect
 import com.hc.wandroidstudy.common.mvi_core.UIEvent
 import com.hc.wandroidstudy.common.mvi_core.UIState
-import com.hc.wandroidstudy.data.WanAndroidRepository
 import com.hc.wandroidstudy.data.bean.BannerData
 import com.hc.wandroidstudy.data.bean.HotProjectData
 import com.hc.wandroidstudy.data.bean.WxData
-import com.hc.wandroidstudy.data.network.WanAndroidClient
+import com.hc.wandroidstudy.data.network.errorCode
 import com.hc.wandroidstudy.data.network.errorMsg
 import com.hc.wandroidstudy.module.home.model.HomeModel
 import com.hc.wandroidstudy.module.home.ui.model.BannerUIModel
@@ -65,7 +63,7 @@ sealed class HomePageViewEvent : UIEvent {
  * MVI 将状态封装在了 State 中统一管理,和 MVVM 有所区别
  */
 @HiltViewModel
-class HomePageViewModel @Inject constructor(private val homeModel: HomeModel) : BaseViewModel<HomePageViewState, HomePageViewEvent, HomePageViewEffect>() {
+class HomePageViewModel @Inject constructor (private val homeModel: HomeModel) : BaseViewModel<HomePageViewState, HomePageViewEvent, HomePageViewEffect>() {
 
     private var currentPage = 0
 
@@ -132,6 +130,7 @@ class HomePageViewModel @Inject constructor(private val homeModel: HomeModel) : 
             }.catch {
                 setEffect { HomePageViewEffect.ShowToast(it.errorMsg) }
                 setState { copy(pageStatus = PageStatus.Error(it)) }
+                LogUtils.e(it.errorMsg,it.errorCode)
             }.collect()
         }
     }

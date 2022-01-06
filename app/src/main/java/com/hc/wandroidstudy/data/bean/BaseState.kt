@@ -1,4 +1,4 @@
-package com.hc.wandroidstudy.common.base
+package com.hc.wandroidstudy.data.bean
 
 
 /**
