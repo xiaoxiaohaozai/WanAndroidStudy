@@ -19,8 +19,7 @@ import javax.inject.Singleton
  *
  * 网络数据中间层实现 @link [WanAndroidApi]
  */
-@Singleton
-class WanAndroidClient @Inject constructor() : WanAndroidApi {
+class WanAndroidClient : WanAndroidApi {
 
     override fun getBanner(): Flow<List<BannerData>> {
         return RxHttp.get(Url.BANNER).toFlowResponse()

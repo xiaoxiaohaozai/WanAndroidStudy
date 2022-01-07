@@ -43,7 +43,7 @@ sealed class HomePageViewEffect : UIEffect {
 }
 
 /**
- *  用户意图事件
+ *  用户事件
  */
 sealed class HomePageViewEvent : UIEvent {
     object LoadData : HomePageViewEvent()
